@@ -1,31 +1,53 @@
-let valueSlider;
+let moveSlider;
+let sizeSlider;
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(windowWidth, windowHeight);
+  
+  // Slider 1 → controls left-right movement
+  moveSlider = createSlider(-200, 200, 0);
+  moveSlider.position(20, 20);
 
-  valueSlider = createSlider(-10,38,9);
- valueSlider.position(10,10);
-
+  // Slider 2 → controls circle size (opposite scaling)
+  sizeSlider = createSlider(5, 500, 10); // min, max, start
+  sizeSlider.position(20, 50);
 }
 
 function draw() {
+  background(15, 15, 15, 15);
 
-  let inputValue = valueSlider.value();
+  // Read slider values
+  let moveValue = moveSlider.value();
+  let sizeValue = sizeSlider.value();
 
-   let inputMin= -10;
-    let inputMax = 38;
+  // Map movement for left and right circles
+  let leftX = map(moveValue, -100, 0, width * 0.25, width * 0.5);
+  let rightX = map(moveValue, -100, 0, width * 0.75, width * 0.5);
 
-    let outputMin= 0;
-    let outputMax = 255;
+  // Opposite scaling
+  let MAX = min(width, height) * 1.1;
+  let leftSize = map(sizeValue, 10, 500, 50, 600);   // grows
+  let rightSize = map(sizeValue, 10, 500, 600, 50);  // shrinks
 
-    let outputValue = map(inputValue, inputMin, inputMax, outputMin, outputMax);
-    //console.log(outputValue);
+  ellipseMode(CENTER);
 
-  background(outputValue);
+  // --- LEFT SIDE (red) ---
+  fill(225, 39, 39);
+   ellipse(rightX, height / 2 - 300, rightSize, rightSize);
+   ellipse(width / 2, height / 2 + 300, rightSize, rightSize);
 
-  let kreitsoutputValue = map(inputValue, inputMin, inputMax, outputMax, outputMin);
+  // --- MIDDLE (grey, stays static) ---
+  fill(122,112,112);
+  ellipse(width / 2, height / 2 - 300, leftSize, leftSize);
+ 
+  ellipse(leftX, height / 2, leftSize, leftSize);
 
-  fill(255, outputValue);
-  ellipse(200, 200, 400,400);
 
+  // --- RIGHT SIDE (white) ---
+  fill(234, 234, 234);
+  ellipse(leftX, height / 2 - 300, leftSize, leftSize);
+  ellipse(leftX, height / 2 + 300, leftSize, leftSize);
+   ellipse(width / 2, height / 2, leftSize, leftSize);
+  ellipse(rightX, height / 2, leftSize, leftSize);
+  ellipse(rightX, height / 2 + 300, leftSize, leftSize);
 }
