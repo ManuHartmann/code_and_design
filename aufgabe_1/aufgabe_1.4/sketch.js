@@ -99,13 +99,12 @@ let angle = frameCount * spinSpeed; // endless spin, faster when bigger
 
     // Hover effect when mouse is close
     if (d < pulsingDotD / 1.5) {
-      fill(225, 39, 39);; // soft pink glow
-      stroke(255);
+      fill(225, 39, 39);; 
       strokeWeight(2);
       ellipse(x, y, pulsingDotD * 0.5, pulsingDotD * 0.5); // larger
     } else {
       fill(255);
-      ellipse(x, y, pulsingDotD, pulsingDotD);
+    
     }
   
 
