@@ -6,3 +6,44 @@ html, body {
 canvas {
   display: block;
 }
+
+
+/* === Slider Styling === */
+.bottomSlider {
+  position: absolute;
+  left: 50px;
+  transform: translateX(-50%);
+  bottom: 40px;            /* distance from bottom */
+  appearance: none;
+  width: 250px;
+  height: 6px;
+  background: #555;         /* gray track */
+  border-radius: 4px;
+  outline: none;
+  opacity: 0.9;
+}
+
+/* --- handle (the white circle) --- */
+.bottomSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.bottomSlider::-webkit-slider-thumb:hover {
+  background: #ddd;
+  transform: scale(1.1);
+}
+
+/* Firefox compatibility */
+.bottomSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+}
