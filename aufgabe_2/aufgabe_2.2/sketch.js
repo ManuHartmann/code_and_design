@@ -1,21 +1,13 @@
-// t = "Zeit" für die Sinus-Wellen (damit sie sich bewegen)
 let t = 0;
-
-// Mikrofon-Input
 let mic;
-
-// geglätteter Audio-Level (damit es nicht nervös zittert)
-let levelSmooth = 10;
-
-// wurde schon geklickt und Audio gestartet?
+let levelSmooth = 0;
 let started = false;
-
-// merkt sich: ist aktuell irgendeine Linie gehovt?
 let hoverAny = false;
-
-// nur noch aus älterer Version, aktuell nicht benutzt
 let micEnabled = false;
 let micIconSize = 40;
+
+// Audio-Status für den Button (HTML-Icon)
+let audioEnabled = true;
 
 
 // Wird einmal am Anfang ausgeführt
@@ -31,6 +23,12 @@ function setup() {
 
   // Text zentriert ausrichten (wichtig für Start-Meldung)
   textAlign(CENTER, CENTER);
+
+  // Audio-Button aus HTML holen und Click-Event setzen
+  const audioBtn = document.getElementById("audioBtn");
+  if (audioBtn) {
+    audioBtn.addEventListener("click", toggleAudio);
+  }
 }
 
 // Wenn das Browserfenster die Grösse ändert
@@ -38,6 +36,7 @@ function windowResized() {
   // Canvas an neue Fenstergrösse anpassen
   resizeCanvas(windowWidth, windowHeight);
 }
+
 
 // Wird bei jedem Mausklick auf die Seite ausgeführt
 function mousePressed() {
@@ -53,10 +52,11 @@ function mousePressed() {
   }
 }
 
+
 function draw() {
   // leichter Trail-Hintergrund
-  // Der 4. Wert (60) ist die Transparenz -> je kleiner, desto mehr "Spuren"
-  background(20, 20, 20, 40);
+  // Der 4. Wert (30) ist die Transparenz -> je kleiner, desto mehr "Spuren"
+  background(20, 20, 20, 30);
 
   // --- STARTZUSTAND, BEVOR AUDIO AKTIV IST ---
   if (!started) {
@@ -103,7 +103,6 @@ function draw() {
   // Mausposition in Geschwindigkeits-Wert umrechnen:
   let speed = map(mouseX, 0, width, maxSpeed, -maxSpeed);
 
-
   // kleine "Dead Zone" in der Mitte: dort bleibt die Bewegung stehen
   if (abs(speed) < maxSpeed * 0.1) {
     speed = 0;
@@ -119,45 +118,43 @@ function draw() {
   drawWaveGroup(
     color(255, 0, 0),      // Rot
     height * 0.50,         // vertikale Basis-Position
-    0.15,                   // Grund-Frequenz (wie oft sie schwingen)
- 60 * ampBoost,        // Grund-Amplitude * Audio-Verstärkung
-    4,                      // Anzahl Linien in der Gruppe
+    0.25,                  // Grund-Frequenz
+    80 * ampBoost,         // Grund-Amplitude * Audio-Verstärkung
+    4,                     // Anzahl Linien
     180,                   // Start-Transparenz
-    70                // End-Transparenz
+    70                     // End-Transparenz
   );
 
-  // schwarze Welle, sehr subtil, mit eigener Alpha-Verteilung
+  // schwarze Welle, sehr subtil
   drawWaveGroup(
     color(0, 0, 0),        // Schwarz
     height * 0.50,
     0.003,
     5 * ampBoost,
     6,
-    180,                   // Start-Transparenz
-    70                     // End-Transparenz
+    180,
+    70
   );
 
   // hellblaue Wellen etwas weiter unten
   drawWaveGroup(
     color(173, 200, 230),  // Light Blue
-    height * 0.8,
+    height * 0.7,
     0.08,
     20 * ampBoost,
     10,
-       180,                   // Start-Transparenz
-    70                     // End-Transparenz
+    180,
+    70
   );
 
   // weisse, feinere Wellen oben
   drawWaveGroup(
     color(255, 255, 255),  // Weiss
-    height * 0.35,
+    height * 0.3,
     0.05,
     10 * ampBoost,
     10
   );
-
-  
 }
 
 
@@ -222,12 +219,9 @@ function drawWave(yOffset, freq, amp, phaseOffset) {
     hoverAny = true; // für den Cursor oder andere Effekte
 
     // Welle bei Hover "energetischer" machen:
-    // - höhere Frequenz -> mehr Wellen pro Breite
-    // - höhere Amplitude -> die Ausschläge werden grösser
     freq *= 1.6;
     amp *= 1.25;
 
-    // Welle mit den verstärkten Werten zeichnen
     beginShape();
     for (let x = 0; x < width; x += 6) {
       let y = yOffset + sin(x * freq + t + phaseOffset) * amp;
@@ -235,7 +229,7 @@ function drawWave(yOffset, freq, amp, phaseOffset) {
     }
     endShape();
 
-    // WICHTIG: danach NICHT nochmal "normal" zeichnen
+    // danach NICHT nochmal "normal" zeichnen
     return;
   }
 
@@ -246,4 +240,28 @@ function drawWave(yOffset, freq, amp, phaseOffset) {
     vertex(x, y);
   }
   endShape();
+}
+
+
+// -----------------------------------------------------------
+// HTML-Audio-Button toggeln
+// -----------------------------------------------------------
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+
+  // Icon im HTML umschalten
+  const audioBtn = document.getElementById("audioBtn");
+  if (audioBtn) {
+    audioBtn.textContent = audioEnabled ? "mic" : "mic_off";
+  }
+
+  // Mic ein/aus
+  if (mic) {
+    if (audioEnabled) {
+      mic.start();
+    } else {
+      mic.stop();
+      levelSmooth = 0; // Waves beruhigen sich sofort
+    }
+  }
 }

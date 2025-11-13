@@ -6,3 +6,15 @@ html, body {
 canvas {
   display: block;
 }
+
+/* Audio Toggle Button */
+#audioBtn {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 48px;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
