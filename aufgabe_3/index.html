@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sketch</title>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="libraries/p5.min.js"></script>
+    
+     <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
+  </head>
+
+  <body>
+    <script src="sketch.js"></script>
+  </body>
+
+  <style>
+  .shape-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: #111;
+    border: 1px solid #444;
+    color: white;
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+
+  .shape-btn:hover {
+    background: #222;
+    border-color: #666;
+    transform: translateY(-2px);
+  }
+
+  .shape-btn.active {
+    background: #3a82f7;
+    border-color: #3a82f7;
+    color: white;
+  }
+
+  .shape-label {
+    color: white;
+    font-size: 14px;
+    margin: 6px 0 4px 6px;
+    font-family: sans-serif;
+  }
+</style>
+
+</html>
