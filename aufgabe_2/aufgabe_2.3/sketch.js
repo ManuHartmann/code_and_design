@@ -1,5 +1,4 @@
 // Audio-reaktive Concert-Waves mit Hover-Rotation & Mic-Icon
-// Manu + ChatGPT 💿🔥
 
 let t = 0;                 // "Zeit" für Animation
 let mic;                   // Mikrofon-Eingang

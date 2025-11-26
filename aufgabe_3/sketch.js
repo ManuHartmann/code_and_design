@@ -53,7 +53,7 @@ function setup() {
   handpose.detectStart(video, gotHands);
 
   // --- FORM-AUSWAHL BUTTONS ---
-  let info = createP('wähle deine Form:');
+  let info = createP('Wähle eine Form:');
   info.class('shape-label'); // nutzt CSS-Klasse
   // mache den Text schwarz und fett
   info.style('color', '#000000');
@@ -97,10 +97,8 @@ function setup() {
 function draw() {
   background(0);
 
-  // Spiegle die Darstellung horizontal (für intuitivere Interaktion)
+  // Keine Spiegelung mehr — Video und Keypoints werden unverändert dargestellt
   push();
-  translate(width, 0);
-  scale(-1, 1);
 
   //Zeige das Video (optional)
   image(video, 0, 0, video.width * ratio, video.height * ratio);
