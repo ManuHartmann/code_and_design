@@ -45,6 +45,10 @@ function setup() {
   video = createCapture(VIDEO);
   video.size(640, 480);
   video.hide(); // Versteckt das Standard-Video-Element
+  // Zusätzlich sicherstellen, dass das DOM-Video-Element nicht sichtbar ist
+  if (video && video.elt) {
+    video.elt.style.display = 'none';
+  }
   
   // Berechne Skalierungsfaktor für Video-zu-Canvas-Anpassung
   ratio = width / video.width;
@@ -100,8 +104,8 @@ function draw() {
   // Keine Spiegelung mehr — Video und Keypoints werden unverändert dargestellt
   push();
 
-  //Zeige das Video (optional)
-  image(video, 0, 0, video.width * ratio, video.height * ratio);
+  // Video für die Erkennung läuft im Hintergrund, aber wird nicht auf das Canvas gezeichnet
+  // (image(video, ...) entfernt, damit nur Keypoints und Shapes sichtbar sind)
   
   // Zeichne nur, wenn das Modell bereit ist und Hände erkannt wurden
   if (isModelReady) {
@@ -308,7 +312,7 @@ if (thumbTip && indexTip) {
   state.smoothY = lerp(state.smoothY, mys, 0.25);
   // Winkel-Lerp: achte auf Wrap-around (kurzeste Richtung)
   // einfache Lerp funktioniert meist, für starke Sprünge könnte man normalize verwenden
-  state.smoothAngle = lerp(state.smoothAngle, angle, 0.25);
+  state.smoothAngle = lerpAngle(state.smoothAngle, angle, 0.25);
 
   push();
   // Verschiebe zum geglätteten Mittelpunkt und rotiere um den geglätteten Winkel
@@ -406,4 +410,13 @@ function drawStar(x, y, radius1, radius2, npoints) {
     vertex(sx, sy);
   }
   endShape(CLOSE);
+}
+
+// Hilfsfunktion: Lerp für Winkel, berücksichtigt Wrap-Around
+function lerpAngle(a, b, t) {
+  // diff in range [-PI, PI]
+  let diff = b - a;
+  while (diff > PI) diff -= TWO_PI;
+  while (diff < -PI) diff += TWO_PI;
+  return a + diff * t;
 }
